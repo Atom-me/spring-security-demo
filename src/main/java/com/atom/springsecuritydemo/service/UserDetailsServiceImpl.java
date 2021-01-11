@@ -41,7 +41,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         System.err.println(username);
         //2，把查询书来的密码（注册时已经加密过）进行解析，或者直接把秘闻放入构造方法中
         String encodePassword = passwordEncoder.encode("123");
-        User user = new User(username, encodePassword, AuthorityUtils.commaSeparatedStringToAuthorityList("admin,normal"));
+        //定义两个权限admin,normal 权限
+        // 也可以在这里定义角色，规则：ROLE_角色名：
+        User user = new User(username, encodePassword, AuthorityUtils.commaSeparatedStringToAuthorityList("admin,normal,ROLE_abc,/main.html"));
         return user;
     }
 }

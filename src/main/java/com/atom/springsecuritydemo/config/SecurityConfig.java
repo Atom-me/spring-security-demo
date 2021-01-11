@@ -63,11 +63,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/login.html").permitAll()// login.html不需要被认证
                 .antMatchers("/error.html").permitAll()// error.html不需要被认证
+                .antMatchers("/js/**", "/css/**", "/images/**").permitAll()
 //                .antMatchers("/adminUserCanAccess.html").hasAuthority("adminxxx") //指定拥有adminxxx权限的用户才可以访问
-                .antMatchers("/adminUserCanAccess.html").hasAnyAuthority("adminxxx", "admin1", "admin2")//指定拥有adminxxx等多个权限中任意一个权限的用户才可以访问
-                .antMatchers("/adminUserCanAccess2.html").hasIpAddress("192.168.56.11")//指定ip地址的用户才可以访问
-                .anyRequest()//任何请求都必须被认证（即都必须登录之后才能被访问，
-                .authenticated();
+//                .antMatchers("/adminUserCanAccess.html").hasAnyAuthority("adminxxx", "admin1", "admin2")//指定拥有adminxxx等多个权限中任意一个权限的用户才可以访问
+//                .antMatchers("/adminUserCanAccess2.html").hasIpAddress("192.168.56.11")//指定ip地址的用户才可以访问
+
+                //角色不能以ROLE_开头，直接写 abc就可以
+//                .antMatchers("/adminUserCanAccess.html").hasRole("abc")
+////                .antMatchers("/adminUserCanAccess2.html").hasRole("abcd")
+//                .anyRequest()//任何请求都必须被认证（即都必须登录之后才能被访问，
+//                .authenticated();
+
+
+                .anyRequest()
+                .access("@myServiceImpl.hasPermission(request,authentication)");
+
 
         //关闭csrf防护
         http.csrf()
